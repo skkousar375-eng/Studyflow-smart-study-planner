@@ -40,4 +40,4 @@ StudyFlow brings essential study-planning tools together in one platform, making
 
 **Developed with the aim of making student life easier and more productive.**
 
-Username: skkousar375-eng         E-mail: skkousar375@gmail.com
+Username: skkousar375-eng  ,        E-mail: skkousar375@gmail.com
