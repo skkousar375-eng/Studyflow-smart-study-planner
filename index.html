@@ -1,0 +1,253 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <meta name="description" content="A calm, focused workspace for planning your study sessions and tracking progress.">
+  <title>StudyFlow — Your study, in rhythm</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="auth-screen" class="auth-screen">
+    <div class="auth-glow auth-glow-one"></div>
+    <div class="auth-glow auth-glow-two"></div>
+    <main class="auth-card">
+      <a class="brand auth-brand" href="#" aria-label="StudyFlow home">
+        <span class="brand-mark"><i class="fa-solid fa-layer-group"></i></span>
+        <span>study<span class="brand-light">flow</span></span>
+      </a>
+      <div class="auth-intro">
+        <span class="eyebrow"><span class="status-dot"></span> YOUR PERSONAL STUDY SPACE</span>
+        <h1 id="auth-heading">Make room for<br><span>what matters.</span></h1>
+        <p>Plan your learning, find your focus, and make steady progress — one session at a time.</p>
+      </div>
+      <div class="auth-tabs" role="tablist" aria-label="Authentication">
+        <button id="signin-tab" class="auth-tab active" type="button" role="tab" aria-selected="true">Sign in</button>
+        <button id="signup-tab" class="auth-tab" type="button" role="tab" aria-selected="false">Create account</button>
+      </div>
+      <form id="auth-form" novalidate>
+        <label id="name-field" class="form-field hidden">Your name
+          <div class="input-wrap"><i class="fa-regular fa-user"></i><input id="auth-name" type="text" autocomplete="name" placeholder="Alex Morgan"></div>
+        </label>
+        <label class="form-field">Email address
+          <div class="input-wrap"><i class="fa-regular fa-envelope"></i><input id="auth-email" type="email" autocomplete="email" placeholder="you@example.com" required></div>
+        </label>
+        <label class="form-field">Password
+          <div class="input-wrap"><i class="fa-solid fa-lock"></i><input id="auth-password" type="password" autocomplete="current-password" placeholder="At least 8 characters" required minlength="8"></div>
+        </label>
+        <p id="auth-error" class="inline-error" role="alert"></p>
+        <button class="button button-primary auth-submit" type="submit"><span id="auth-submit-label">Sign in</span><i class="fa-solid fa-arrow-right"></i></button>
+      </form>
+      <p class="auth-note"><i class="fa-solid fa-shield-halved"></i> Your study data stays on this device.</p>
+    </main>
+    <p class="auth-footer">A little progress each day adds up.</p>
+  </div>
+
+  <div id="app-shell" class="app-shell hidden">
+    <aside class="sidebar">
+      <a class="brand sidebar-brand" href="#" aria-label="StudyFlow dashboard">
+        <span class="brand-mark"><i class="fa-solid fa-layer-group"></i></span>
+        <span>study<span class="brand-light">flow</span></span>
+      </a>
+      <div class="sidebar-label">WORKSPACE</div>
+      <nav class="side-nav" aria-label="Main navigation">
+        <button class="nav-link active" data-view="dashboard"><i class="fa-solid fa-grip"></i><span>Overview</span></button>
+        <button class="nav-link" data-view="tasks"><i class="fa-regular fa-square-check"></i><span>Tasks</span><span id="nav-task-count" class="nav-count">0</span></button>
+        <button class="nav-link" data-view="schedule"><i class="fa-regular fa-calendar"></i><span>Study plan</span></button>
+        <button class="nav-link" data-view="focus"><i class="fa-solid fa-stopwatch"></i><span>Focus timer</span></button>
+        <button class="nav-link" data-view="settings"><i class="fa-solid fa-sliders"></i><span>Settings</span></button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="sidebar-tip">
+          <span class="tip-icon"><i class="fa-regular fa-lightbulb"></i></span>
+          <p>Small steps, every day.<br><strong>You’re doing great.</strong></p>
+        </div>
+        <div class="user-profile">
+          <span id="user-avatar" class="avatar">S</span>
+          <span class="user-meta"><strong id="user-name">Student</strong><small id="user-email">student@example.com</small></span>
+          <button id="signout-button" class="icon-button signout-button" type="button" aria-label="Sign out" title="Sign out"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <header class="topbar">
+        <div class="mobile-brand">
+          <span class="brand-mark"><i class="fa-solid fa-layer-group"></i></span><strong>study<span class="brand-light">flow</span></strong>
+        </div>
+        <div class="breadcrumbs"><span>Workspace</span><i class="fa-solid fa-chevron-right"></i><strong id="current-page-label">Overview</strong></div>
+        <div class="topbar-right">
+          <span id="today-label" class="today-label"></span>
+          <button id="quick-add-button" class="button button-primary top-add" type="button"><i class="fa-solid fa-plus"></i><span>New task</span></button>
+          <button id="mobile-signout" class="icon-button mobile-signout" type="button" aria-label="Sign out"><i class="fa-solid fa-arrow-right-from-bracket"></i></button>
+        </div>
+      </header>
+      <nav class="mobile-nav" aria-label="Main navigation">
+        <button class="mobile-nav-link active" data-view="dashboard" type="button"><i class="fa-solid fa-grip"></i><span>Overview</span></button>
+        <button class="mobile-nav-link" data-view="tasks" type="button"><i class="fa-regular fa-square-check"></i><span>Tasks</span></button>
+        <button class="mobile-nav-link" data-view="schedule" type="button"><i class="fa-regular fa-calendar"></i><span>Plan</span></button>
+        <button class="mobile-nav-link" data-view="focus" type="button"><i class="fa-solid fa-stopwatch"></i><span>Focus</span></button>
+        <button class="mobile-nav-link" data-view="settings" type="button"><i class="fa-solid fa-sliders"></i><span>More</span></button>
+      </nav>
+
+      <div id="view-dashboard" class="view-panel">
+        <section class="page-heading heading-row dashboard-hero">
+          <div class="dashboard-hero-copy"><div id="greeting-label" class="eyebrow">YOUR OVERVIEW</div><h1>Good day, <span id="greeting-name">Learner</span> <span class="wave">✦</span></h1><p>Here’s your progress at a glance. Keep your momentum going.</p></div>
+          <div class="dashboard-hero-actions">
+            <button class="button button-primary" data-go="focus" type="button"><i class="fa-solid fa-stopwatch"></i> Start a focus session</button>
+            <button class="button button-quiet" data-go="schedule" type="button"><i class="fa-regular fa-calendar"></i> View study plan</button>
+          </div>
+        </section>
+        <section class="metric-grid" aria-label="Study statistics">
+          <article class="metric-card"><div class="metric-top"><span class="metric-icon violet-icon"><i class="fa-regular fa-clock"></i></span><span class="metric-caption">ALL TIME</span></div><div class="metric-value"><strong id="metric-hours">0</strong><span>hrs</span></div><p>Total study time</p><div class="metric-foot"><i class="fa-solid fa-arrow-trend-up"></i> Focus time adds up here</div></article>
+          <article class="metric-card"><div class="metric-top"><span class="metric-icon green-icon"><i class="fa-solid fa-check"></i></span><span class="metric-caption">NICE WORK</span></div><div class="metric-value"><strong id="metric-completed">0</strong></div><p>Tasks completed</p><div class="metric-foot neutral-foot">One thing at a time</div></article>
+          <article class="metric-card"><div class="metric-top"><span class="metric-icon amber-icon"><i class="fa-regular fa-calendar-check"></i></span><span class="metric-caption">NEXT 30 DAYS</span></div><div class="metric-value"><strong id="metric-exams">0</strong></div><p>Upcoming exams</p><div class="metric-foot neutral-foot">Stay ahead of the curve</div></article>
+          <article class="metric-card"><div class="metric-top"><span class="metric-icon blue-icon"><i class="fa-solid fa-fire"></i></span><span class="metric-caption">CONSISTENCY</span></div><div class="metric-value"><strong id="metric-streak">0</strong><span>days</span></div><p>Current streak</p><div class="metric-foot"><i class="fa-solid fa-sparkles"></i> Show up for yourself</div></article>
+        </section>
+        <section class="dashboard-grid">
+          <article class="panel goal-panel">
+            <div class="panel-heading"><div><div class="eyebrow">YOUR CONSISTENCY</div><h2>Study goal</h2></div><button class="text-button" data-go="settings" type="button"><i class="fa-solid fa-sliders"></i> Set goal</button></div>
+            <div class="goal-summary"><div><strong id="week-hours">0</strong><span id="goal-target-label"> / 10 hours</span></div><span id="goal-percent">0%</span></div>
+            <div class="progress-track"><div id="goal-progress" class="progress-fill"></div></div>
+            <div class="week-chart" id="week-chart" aria-label="Study minutes per day"></div>
+            <div class="chart-days"><span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span></div>
+          </article>
+          <article class="panel next-panel">
+            <div class="panel-heading"><div><div class="eyebrow">WHAT’S AHEAD</div><h2>Upcoming tasks</h2></div><button class="text-button" data-go="tasks" type="button">See all <i class="fa-solid fa-arrow-right"></i></button></div>
+            <div id="upcoming-list" class="upcoming-list"></div>
+          </article>
+        </section>
+        <section class="dashboard-grid dashboard-extra-grid">
+          <article class="panel subject-panel">
+            <div class="panel-heading"><div><div class="eyebrow">WHERE YOUR TIME GOES</div><h2>Study by subject</h2></div><span class="period-pill">All time</span></div>
+            <div id="subject-insights" class="subject-insights"></div>
+          </article>
+          <article class="panel dashboard-shortcuts">
+            <div class="panel-heading"><div><div class="eyebrow">QUICK ACCESS</div><h2>Your workspace</h2></div></div>
+            <div class="shortcut-list">
+              <button data-go="tasks" type="button"><span class="shortcut-icon"><i class="fa-regular fa-square-check"></i></span><span><strong>Manage tasks</strong><small>Search, filter, and sort assignments</small></span><i class="fa-solid fa-chevron-right"></i></button>
+              <button data-go="schedule" type="button"><span class="shortcut-icon"><i class="fa-regular fa-calendar"></i></span><span><strong>Weekly plan</strong><small>Organize your study blocks</small></span><i class="fa-solid fa-chevron-right"></i></button>
+              <button data-go="settings" type="button"><span class="shortcut-icon"><i class="fa-solid fa-sliders"></i></span><span><strong>Study goals</strong><small>Adjust your weekly target</small></span><i class="fa-solid fa-chevron-right"></i></button>
+            </div>
+          </article>
+        </section>
+        <section class="panel today-panel">
+          <div class="panel-heading"><div><div class="eyebrow">MAKE IT COUNT</div><h2>Pick up where you left off</h2></div></div>
+          <div class="quick-actions">
+            <button class="action-card focus-action" data-go="focus" type="button"><span class="action-icon"><i class="fa-solid fa-stopwatch"></i></span><span><strong>Start a focus session</strong><small>25 minutes of focused work</small></span><i class="fa-solid fa-arrow-right action-arrow"></i></button>
+            <button class="action-card plan-action" data-go="schedule" type="button"><span class="action-icon"><i class="fa-regular fa-calendar-plus"></i></span><span><strong>Plan your week</strong><small>Make time for what matters</small></span><i class="fa-solid fa-arrow-right action-arrow"></i></button>
+          </div>
+        </section>
+      </div>
+      <div id="view-settings" class="view-panel hidden">
+        <section class="page-heading"><div><div class="eyebrow">MAKE IT YOURS</div><h1>Goals & settings</h1><p>Personalize your weekly study target.</p></div></section>
+        <section class="settings-grid">
+          <article class="panel settings-card">
+            <span class="settings-icon violet-icon"><i class="fa-solid fa-bullseye"></i></span>
+            <div class="eyebrow">WEEKLY TARGET</div><h2>Set a study goal</h2>
+            <p>Choose how many hours you’d like to study each week. Your dashboard updates to match.</p>
+            <form id="goal-form" class="goal-form">
+              <label class="form-field" for="goal-input">Hours per week <input id="goal-input" type="number" min="1" max="80" step="1" value="10" required></label>
+              <button class="button button-primary" type="submit"><i class="fa-solid fa-check"></i> Save goal</button>
+            </form>
+          </article>
+        </section>
+      </div>
+
+      <div id="view-tasks" class="view-panel hidden">
+        <section class="page-heading heading-row"><div><div class="eyebrow">STAY ON TRACK</div><h1>Your tasks</h1><p>Break your goals into clear, manageable next steps.</p></div><button class="button button-primary" id="add-task-button" type="button"><i class="fa-solid fa-plus"></i> Add task</button></section>
+        <section class="panel tasks-panel">
+          <div class="task-toolbar">
+            <div class="filter-tabs" role="group" aria-label="Filter tasks">
+              <button class="filter-tab active" data-status="all" type="button">All <span id="count-all">0</span></button>
+              <button class="filter-tab" data-status="pending" type="button">To do <span id="count-pending">0</span></button>
+              <button class="filter-tab" data-status="completed" type="button">Completed <span id="count-completed">0</span></button>
+            </div>
+            <label class="sort-select">Sort by
+              <select id="task-sort" aria-label="Sort tasks"><option value="due">Due date</option><option value="priority">Priority</option><option value="title">Title</option></select>
+            </label>
+          </div>
+          <div class="task-filters">
+            <label class="task-search"><i class="fa-solid fa-magnifying-glass"></i><input id="task-search" type="search" placeholder="Search tasks or subjects" aria-label="Search tasks"></label>
+            <label class="sort-select">Priority
+              <select id="task-priority-filter" aria-label="Filter tasks by priority"><option value="all">Any priority</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select>
+            </label>
+          </div>
+          <div id="tasks-list" class="tasks-list"></div>
+        </section>
+      </div>
+
+      <div id="view-schedule" class="view-panel hidden">
+        <section class="page-heading heading-row"><div><div class="eyebrow">MAKE TIME TO LEARN</div><h1>Your study plan</h1><p>Give your goals a place in your week.</p></div><button class="button button-primary" id="add-session-button" type="button"><i class="fa-solid fa-plus"></i> Add session</button></section>
+        <section class="panel schedule-panel">
+          <div class="panel-heading schedule-title"><div><div class="eyebrow">WEEKLY ROUTINE</div><h2>Study sessions</h2></div><span class="period-pill"><i class="fa-regular fa-clock"></i> Your local time</span></div>
+          <div id="schedule-grid" class="schedule-grid"></div>
+        </section>
+      </div>
+
+      <div id="view-focus" class="view-panel hidden">
+        <section class="page-heading"><div><div class="eyebrow">ONE THING AT A TIME</div><h1>Find your focus</h1><p>Make space for deep work, then take a well-earned break.</p></div></section>
+        <section class="focus-layout">
+          <article class="panel timer-panel">
+            <div class="eyebrow">POMODORO TIMER</div>
+            <div class="timer-modes" role="group" aria-label="Timer mode">
+              <button class="timer-mode active" data-mode="focus" type="button">Focus</button>
+              <button class="timer-mode" data-mode="short" type="button">Short break</button>
+              <button class="timer-mode" data-mode="long" type="button">Long break</button>
+            </div>
+            <div class="timer-ring" id="timer-ring"><div class="timer-inner"><span id="timer-display">25:00</span><small id="timer-mode-label">TIME TO FOCUS</small></div></div>
+            <label class="focus-subject-label">Focus subject
+              <select id="focus-subject" aria-label="Focus subject"></select>
+            </label>
+            <p id="timer-message" class="timer-message">You’ve got this. Start when you’re ready.</p>
+            <div class="timer-controls"><button id="timer-start" class="button button-primary timer-start" type="button"><i class="fa-solid fa-play"></i> Start focus</button><button id="timer-reset" class="button button-quiet" type="button"><i class="fa-solid fa-rotate-left"></i> Reset</button></div>
+            <div class="timer-note"><i class="fa-regular fa-lightbulb"></i> After each focus session, take a break to recharge.</div>
+          </article>
+          <aside class="focus-side">
+            <article class="panel focus-stat"><span class="metric-icon violet-icon"><i class="fa-solid fa-bolt"></i></span><div><div class="eyebrow">TOTAL FOCUS TIME</div><strong id="focus-total">0h 00m</strong><p>Every focused minute counts.</p></div></article>
+            <article class="panel focus-stat"><span class="metric-icon green-icon"><i class="fa-solid fa-circle-check"></i></span><div><div class="eyebrow">SESSIONS TODAY</div><strong id="focus-today">0</strong><p>Keep showing up for yourself.</p></div></article>
+            <article class="focus-quote"><i class="fa-solid fa-quote-left"></i><p>“You don’t have to see the whole staircase, just take the first step.”</p><small>— Martin Luther King Jr.</small></article>
+          </aside>
+        </section>
+      </div>
+      <footer class="main-footer"><span>Made for steady progress.</span><span><i class="fa-regular fa-heart"></i> Your data is saved on this device</span></footer>
+    </main>
+  </div>
+
+  <div id="modal-backdrop" class="modal-backdrop hidden" role="presentation">
+    <section id="editor-modal" class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-heading"><div><div id="modal-eyebrow" class="eyebrow">MAKE A PLAN</div><h2 id="modal-title">Add a task</h2></div><button id="modal-close" class="icon-button" type="button" aria-label="Close dialog"><i class="fa-solid fa-xmark"></i></button></div>
+      <form id="editor-form">
+        <div id="task-fields">
+          <label class="form-field">Task title<input id="task-title" type="text" maxlength="100" placeholder="e.g. Review chapter 4" required></label>
+          <label class="form-field">Subject / course<input id="task-subject" type="text" maxlength="60" placeholder="e.g. Biology" required></label>
+          <div class="form-row">
+            <label class="form-field">Task type<select id="task-kind"><option value="assignment">Assignment</option><option value="exam">Exam</option></select></label>
+            <label class="form-field">Priority<select id="task-priority"><option value="medium">Medium</option><option value="high">High</option><option value="low">Low</option></select></label>
+          </div>
+          <div class="form-row">
+            <label class="form-field">Due date<input id="task-due" type="date" required></label>
+            <label class="form-field">Estimated study time <span class="field-unit">(minutes)</span><input id="task-duration" type="number" min="5" max="1440" step="5" value="60" required></label>
+          </div>
+        </div>
+        <div id="session-fields" class="hidden">
+          <label class="form-field">Subject / course<input id="session-subject" type="text" maxlength="60" placeholder="e.g. Biology" required></label>
+          <label class="form-field">Session title<input id="session-title" type="text" maxlength="80" placeholder="e.g. Read chapter 4" required></label>
+          <label class="form-field">Day of the week<select id="session-day" required></select></label>
+          <div class="form-row">
+            <label class="form-field">Start time<input id="session-start" type="time" value="09:00" required></label>
+            <label class="form-field">End time<input id="session-end" type="time" value="10:00" required></label>
+          </div>
+        </div>
+        <p id="editor-error" class="inline-error" role="alert"></p>
+        <div class="modal-actions"><button id="modal-cancel" class="button button-quiet" type="button">Cancel</button><button id="modal-save" class="button button-primary" type="submit">Save task</button></div>
+      </form>
+    </section>
+  </div>
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+  <script src="app.js"></script>
+</body>
+</html>
