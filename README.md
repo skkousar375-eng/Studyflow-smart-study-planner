@@ -18,7 +18,7 @@ StudyFlow is a smart and user-friendly study planner website designed to help st
 
 ## How to Run the Project
 1. Clone this repository:
-   #https//github.com/skkousar375-eng/Studyflow-smart-study-planner
+      https://github.com/skkousar375-eng/Studyflow-smart-study-planner
 2. Open the project folder in Visual Studio Code.
 3. Open the `index.html` file.
 4. Run the website using the Live Server extension or your browser.
